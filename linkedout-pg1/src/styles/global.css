@@ -1,0 +1,320 @@
+/* Removed caret styles (typewriter disabled) */
+@import './fonts.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3D floating text effect */
+.float3d {
+  display: inline-block;
+  will-change: transform, text-shadow, filter;
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.15),
+    0 2px 2px rgba(0,0,0,0.15),
+    0 6px 8px rgba(0,0,0,0.12);
+  transform: translate3d(-4px, 0, 0) rotate3d(0, 1, 0, -6deg);
+  animation: float3d 4.5s ease-in-out infinite;
+}
+.float3d--alt {
+  transform: translate3d(4px, 0, 0) rotate3d(0, 1, 0, 6deg);
+  animation: float3dAlt 5s ease-in-out infinite;
+}
+@keyframes float3d {
+  0%, 100% { transform: translate3d(-4px, 0, 0) rotate3d(0,1,0,-6deg); }
+  50%      { transform: translate3d(-4px, -2px, 0) rotate3d(0,1,0,-3deg); }
+}
+@keyframes float3dAlt {
+  0%, 100% { transform: translate3d(4px, 0, 0) rotate3d(0,1,0,6deg); }
+  50%      { transform: translate3d(4px, -2px, 0) rotate3d(0,1,0,3deg); }
+}
+
+/* Reusable CTA hover effect: dark pill slides in, text turns white, arrow slides */
+.cta-animated {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate; /* ensure ::before stays behind text */
+  color: #FFC300; /* golden default */
+  transition: color 300ms ease;
+  z-index: 0; /* base layer so ::before can sit at -1 */
+}
+.cta-animated::before {
+  content: "";
+  position: absolute;
+  inset: 4px; /* creates a pill inset so borders show if present */
+  background: rgba(0,0,0,0.75);
+  border-radius: 9999px;
+  transform: translateX(110%);
+  transition: transform 400ms ease;
+  z-index: -1; /* always behind text */
+}
+.cta-animated:hover { color: #ffffff; }
+.cta-animated:active { color: #FFC300; }
+.cta-animated:hover::before { transform: translateX(0%); }
+.cta-animated:active::before { transform: translateX(0%); }
+
+.cta-animated .cta-label, .cta-animated .cta-arrow {
+  position: relative;
+  z-index: 1; /* above the ::before pill */
+}
+
+.cta-animated .cta-arrow {
+  display: inline-block;
+  position: relative;
+}
+.cta-animated .cta-arrow::before {
+  content: "\2192"; /* → */
+  display: inline-block;
+  transform: translateX(0);
+  transition: transform 260ms ease;
+}
+.cta-animated:hover .cta-arrow::before { transform: translateX(8px); }
+.cta-animated:active .cta-arrow::before {
+  content: "\2190"; /* ← */
+  transform: translateX(-8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-animated,
+  .cta-animated::before,
+  .cta-animated .cta-arrow { transition: none; }
+}
+
+/* Glass + gold utilities for dark theme */
+@layer utilities {
+  /* Consistent vertical spacing for sections */
+  .section-spacing {
+    padding-block: clamp(3.5rem, 6vw, 7rem);
+  }
+  .section-spacing-tight {
+    padding-block: clamp(2rem, 4vw, 4rem);
+  }
+  .block-gap-sm { gap: 0.75rem; }
+  .block-gap { gap: 1.25rem; }
+  .block-gap-lg { gap: 2rem; }
+  .section-divider {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    margin-block: clamp(1.5rem, 3vw, 3rem);
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .gradient-primary {
+    background: radial-gradient(80% 80% at 50% 50%, rgba(255,195,0,0.3) 0%, rgba(255,195,0,0.12) 45%, rgba(255,195,0,0.06) 70%, rgba(255,195,0,0) 100%),
+                linear-gradient(135deg, #FFC300 0%, #CC9F00 100%);
+  }
+  
+  .gradient-primary-hover {
+    background: linear-gradient(135deg, #FFD84D 0%, #CC9F00 100%);
+  }
+  
+  .gradient-light {
+    background: linear-gradient(135deg, #E0E7FF 0%, #F3E8FF 100%);
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, #FFD84D 0%, #FFC300 50%, #CC9F00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .shadow-modern {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .shadow-modern-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .shadow-glow {
+    box-shadow: 0 0 30px rgba(255, 195, 0, 0.35);
+  }
+  
+  .shadow-glow-purple {
+    box-shadow: 0 0 24px rgba(255, 216, 77, 0.25);
+  }
+
+  .gold-ring {
+    box-shadow: 0 0 0 2px rgba(255,195,0,0.6), 0 0 40px rgba(255,195,0,0.2) inset;
+  }
+
+  .gold-gradient-animated {
+    background: linear-gradient(135deg, #FFEA9E, #FFD84D, #FFC300, #CC9F00, #FFEA9E);
+    background-size: 300% 300%;
+    animation: goldGradientShift 6s ease-in-out infinite;
+  }
+
+  .glass-deep {
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(14px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* 3D interactive button */
+  .btn-3d {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(180deg, #FFD84D 0%, #FFC300 60%, #CC9F00 100%);
+    color: #000; /* visible on dark bg */
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow:
+      0 14px 28px rgba(0,0,0,0.35),
+      0 10px 10px rgba(0,0,0,0.22),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    transform-style: preserve-3d;
+    overflow: hidden;
+  }
+  .btn-3d:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 18px 30px rgba(0,0,0,0.45),
+      0 10px 10px rgba(0,0,0,0.25),
+      0 0 24px rgba(255,195,0,0.35);
+  }
+  .btn-3d:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow:
+      0 10px 18px rgba(0,0,0,0.35),
+      inset 0 2px 8px rgba(0,0,0,0.25);
+    /* stronger color on click */
+    background: linear-gradient(180deg, #FFE27A 0%, #FFD84D 55%, #FFC300 100%);
+  }
+  .btn-3d::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.45) 35%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 800ms ease;
+    mix-blend-mode: screen;
+  }
+  .btn-3d:hover::before { transform: translateX(120%); }
+  .btn-3d .btn-arrow { transition: transform 260ms ease; }
+  .btn-3d:hover .btn-arrow { transform: translateX(6px); }
+  .btn-3d:active .btn-arrow { transform: translateX(14px); }
+
+  /* click ripple */
+  .btn-3d::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 40%, transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 500ms ease, opacity 500ms ease;
+  }
+  .btn-3d:active::after {
+    transform: translate(-50%, -50%) scale(14);
+    opacity: 1;
+  }
+
+  /* Nuraform-like pill CTA */
+  .btn-nura {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.9rem 1.2rem 0.9rem 1.2rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #FFD84D 0%, #FFC300 55%, #CC9F00 100%);
+    color: #0A0A0A; /* dark text for contrast */
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    font-weight: 700;
+  }
+  .btn-nura .btn-nura__label { position: relative; z-index: 1; letter-spacing: 0.2px; }
+  .btn-nura::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(120deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.45) 25%, rgba(255,255,255,0.1) 60%, transparent 80%);
+    transform: translateX(-120%);
+    transition: transform 800ms ease;
+    pointer-events: none;
+  }
+  .btn-nura:hover::before { transform: translateX(120%); }
+  .btn-nura:active {
+    filter: saturate(115%);
+    transform: translateY(1px);
+    /* clear color change on press */
+    background: linear-gradient(135deg, #FFF6CC 0%, #FFE27A 50%, #FFD84D 100%);
+  }
+
+  /* round arrow puck on the right that slides */
+  .btn-nura .btn-nura__arrow {
+    position: relative;
+    z-index: 1;
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    background: #fff;
+    color: #000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
+    transform: translateX(0);
+    transition: transform 260ms ease;
+  }
+  .btn-nura:hover .btn-nura__arrow { transform: translateX(4px); }
+  .btn-nura:active .btn-nura__arrow {
+    transform: translateX(10px);
+    background: #000; /* invert puck */
+    color: #fff;
+  }
+}
+
+@keyframes goldGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Modern scrollbar styling */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #0A0A0A;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #FFD84D, #FFC300);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #FFE27A, #FFD84D);
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+@layer base {
+  * {
+    transition: all 0.2s ease-in-out;
+  }
+}
